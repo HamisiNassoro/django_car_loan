@@ -14,12 +14,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include  # Import include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+from applications.views import ApplicationViewSet, PersonalDetailsViewSet, LoanDetailsViewSet, DocumentUploadViewSet  # Adjust import based on your app structure
 
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'applications', ApplicationViewSet)
+router.register(r'personal_details', PersonalDetailsViewSet)
+router.register(r'loan_details', LoanDetailsViewSet)
+router.register(r'documents', DocumentUploadViewSet)
 
+# The URL patterns for the project
 urlpatterns = [
-    path('admin/', admin.site.urls),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('admin/', admin.site.urls),  # Admin panel URL
+    path('api/', include(router.urls)),  # Include the router URLs under 'api/' prefix
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # Serve media files during development
