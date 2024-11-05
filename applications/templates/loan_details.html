@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Step 2: Loan Details</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Next</button>
+</form>
+{% endblock %}

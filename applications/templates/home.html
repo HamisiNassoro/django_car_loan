@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-intro">
+    <h1>Welcome to the Car Loan Scheme for Civil Servants</h1>
+    <p>Eligibility criteria, loan benefits, and interest rates go here...</p>
+    <a href="{% url 'applications:personal_details' %}" class="btn-start">Start Application</a>
+</div>
+<div class="quick-links">
+    <a href="{% url 'applications:enquiry' %}">Enquiry</a>
+    <a href="{% url 'applications:faqs' %}">FAQs</a>
+</div>
+{% endblock %}

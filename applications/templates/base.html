@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}  <!-- Load static files template tag -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Car Loan Scheme{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!-- Example static file -->
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'personal_details' %}">Apply</a>
+            <a href="{% url 'enquiry' %}">Enquiry</a>
+            <a href="{% url 'faqs' %}">FAQs</a>
+        </nav>
+    </header>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="social-media">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+            </div>
+            <div class="contact-info">
+                <p>Email: support@carloanscheme.co.ke</p>
+                <p>Phone: +254-700-123-456</p>
+            </div>
+        </div>
+        <p>&copy; 2024 Car Loan Scheme for Civil Servants. All rights reserved.</p>
+    </footer>
+</body>
+</html>
