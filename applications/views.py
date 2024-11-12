@@ -9,60 +9,63 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'home.html')
 
-# Stage 1: Personal Information
+# Multi-step form for application
 @login_required
-def personal_details_view(request):
-    if request.method == 'POST':
-        form = PersonalDetailsForm(request.POST)
-        if form.is_valid():
-            application = Application.objects.create(user=request.user)
-            personal_details = form.save(commit=False)
-            personal_details.application = application
-            personal_details.save()
-            return redirect('loan_details')  # Go to the next stage
-    else:
-        form = PersonalDetailsForm()
-    return render(request, 'personal_details.html', {'form': form})
+def application_form(request):
+    # Retrieve or create an active application for the user
+    application = Application.objects.filter(user=request.user, status='pending').order_by('-created_at').first()
 
-# Stage 2: Loan Application Details
-@login_required
-def loan_details_view(request):
-    application = Application.objects.filter(user=request.user).last()  # Assuming latest application is active
-    if request.method == 'POST':
-        form = LoanDetailsForm(request.POST)
-        if form.is_valid():
-            loan_details = form.save(commit=False)
-            loan_details.application = application
-            loan_details.save()
-            return redirect('document_upload')  # Go to the next stage
-    else:
-        form = LoanDetailsForm()
-    return render(request, 'loan_details.html', {'form': form})
+    # If no pending application exists, create a new one
+    if not application:
+        application = Application.objects.create(user=request.user, status='pending')
+    
+    stage = request.POST.get('stage', '1')  # Default to stage 1 if no stage is specified
 
-# Stage 3: Document Upload & Fee Payment
-@login_required
-def document_upload_view(request):
-    application = Application.objects.filter(user=request.user).last()  # Assuming latest application is active
     if request.method == 'POST':
-        form = DocumentUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            document_upload = form.save(commit=False)
-            document_upload.application = application
-            document_upload.save()
-            return redirect('application_complete')  # Final step after upload
-    else:
-        form = DocumentUploadForm()
-    return render(request, 'document_upload.html', {'form': form})
+        if stage == '1':
+            form = PersonalDetailsForm(request.POST)
+            if form.is_valid():
+                personal_details = form.save(commit=False)
+                personal_details.application = application
+                personal_details.save()
+                return redirect('applications:application_form')  # Move to next stage
 
-# Application Complete
+        elif stage == '2':
+            form = LoanDetailsForm(request.POST)
+            if form.is_valid():
+                loan_details = form.save(commit=False)
+                loan_details.application = application
+                loan_details.save()
+                return redirect('applications:application_form')  # Move to next stage
+
+        elif stage == '3':
+            form = DocumentUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                document_upload = form.save(commit=False)
+                document_upload.application = application
+                document_upload.save()
+                return redirect('applications:application_complete')  # Final step after upload
+    else:
+        # Display the form for the current stage
+        if stage == '1':
+            form = PersonalDetailsForm()
+        elif stage == '2':
+            form = LoanDetailsForm()
+        elif stage == '3':
+            form = DocumentUploadForm()
+
+    # Render the form with the current stage
+    return render(request, 'application_form.html', {'form': form, 'stage': stage})
+
+# Application completion view
 @login_required
 def application_complete_view(request):
     return render(request, 'application_complete.html')
 
-# Enquiry Form
+# Enquiry form view
 def enquiry_view(request):
     if request.method == 'POST':
-        # Logic for handling enquiry form submissions
+        # Handle enquiry form submission
         pass
     return render(request, 'enquiry.html')
 
