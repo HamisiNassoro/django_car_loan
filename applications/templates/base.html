@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Car Loan Application{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/application_process.js' %}" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'applications:home' %}">Car Loan Scheme</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{% url 'applications:home' %}">Home</a></li>
+                <li><a href="{% url 'applications:application_form' %}">Apply</a></li>
+                <li><a href="{% url 'applications:enquiry' %}">Enquiry</a></li>
+                <li><a href="{% url 'applications:faqs' %}">FAQs</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Car Loan Scheme for Civil Servants. All rights reserved.</p>
+            <div class="social-media">
+                <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot Placeholder -->
+    <div id="chatbot" class="chatbot">
+        <span class="close-chat" onclick="document.getElementById('chatbot').style.display='none';">&times;</span>
+        <p>Hello! How can I assist you today?</p>
+    </div>
+</body>
+</html>

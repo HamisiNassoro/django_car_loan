@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Application Form{% endblock %}
+
+{% block content %}
+<div class="container" id="application-container">
+    <div id="stage1" class="stage">
+        <h2>Step 1: Personal Information</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="stage" value="1">
+            <button type="submit" id="next-button">Next</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
