@@ -37,12 +37,6 @@ class Application(models.Model):
         return f"{self.tracking_number} - {self.user.username}"
 
 # Stores personal details for each application
-# models.py
-
-from django.db import models
-from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
-from django.utils import timezone
 
 # Define the application and job group constants
 JOB_GROUP_SCALE_CHOICES = [

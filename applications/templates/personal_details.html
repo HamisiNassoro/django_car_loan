@@ -7,41 +7,12 @@
         <div class="step step-1 active">Step 1</div>
         <div class="step step-2">Step 2</div>
         <div class="step step-3">Step 3</div>
-        <div class ="step step-4">Step 4</div>
-        
     </div>
-    
     <form method="POST">
         {% csrf_token %}
-        
         {{ form.as_p }}
-        
-        <!-- Job Group Scale field (rendered by Django form) -->
-        <label for="{{ form.job_group_scale.id_for_label }}">Job Group Scale:</label>
-        {{ form.job_group_scale }}
-        
-        <!-- Allocated Amount field (rendered by Django form) -->
-        <label for="{{ form.allocated_amount.id_for_label }}">Allocated Amount:</label>
-        {{ form.allocated_amount }}
-
         <button type="submit" class="btn">Next</button>
     </form>
 </div>
 
-<script>
-    // Define job group allocation mappings
-    const jobGroupAllocation = {
-        'L': 10000.00,
-        'M': 20000.00,
-        'N': 30000.00,
-        'R': 40000.00
-    };
-
-    // Add event listener for the job group dropdown change
-    document.getElementById("{{ form.job_group_scale.id_for_label }}").addEventListener('change', function() {
-        const jobGroup = this.value;
-        const allocatedAmount = jobGroupAllocation[jobGroup] || 0;
-        document.getElementById("{{ form.allocated_amount.id_for_label }}").value = allocatedAmount.toFixed(2);
-    });
-</script>
 {% endblock %}
