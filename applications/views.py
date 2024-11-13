@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import PersonalDetailsForm, LoanDetailsForm, DocumentUploadForm
+from .forms import PersonalDetailsForm, LoanDetailsForm, DocumentUploadForm, JobDetailsForm
 from .models import Application, ApplicationTracker
 from django.contrib.auth.decorators import login_required
 
@@ -31,6 +31,14 @@ def application_form(request):
                 return redirect('applications:application_form')  # Move to next stage
 
         elif stage == '2':
+            form =  JobDetailsForm(request.POST)
+            if form.is_valid():
+                job_details = form.save(commit=False)
+                job_details.application = application
+                job_details.save()
+                return redirect('applications:application_form')  # Move to next stage
+
+        elif stage == '3':
             form = LoanDetailsForm(request.POST)
             if form.is_valid():
                 loan_details = form.save(commit=False)
@@ -38,7 +46,7 @@ def application_form(request):
                 loan_details.save()
                 return redirect('applications:application_form')  # Move to next stage
 
-        elif stage == '3':
+        elif stage == '4':
             form = DocumentUploadForm(request.POST, request.FILES)
             if form.is_valid():
                 document_upload = form.save(commit=False)
@@ -50,8 +58,10 @@ def application_form(request):
         if stage == '1':
             form = PersonalDetailsForm()
         elif stage == '2':
-            form = LoanDetailsForm()
+            form = JobDetailsForm()
         elif stage == '3':
+            form = LoanDetailsForm()
+        elif stage == '4':
             form = DocumentUploadForm()
 
     # Render the form with the current stage
