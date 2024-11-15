@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Application, PersonalDetails, LoanDetails, DocumentUpload, ApplicationTracker, JobDetails
+from .models import Application, PersonalDetails, LoanDetails, DocumentUpload, ApplicationTracker, JobDetails,  Invoice
 
 # Admin configuration for Application model
 class ApplicationAdmin(admin.ModelAdmin):
@@ -75,7 +75,21 @@ class DocumentUploadAdmin(admin.ModelAdmin):
     search_fields = ('application__tracking_number', 'document_type')
     list_filter = ('document_type', 'is_validated')
 
+class InvoiceAdmin(admin.ModelAdmin):
+    # Display these fields in the list view
+    list_display = ('application', 'amount_due', 'created_at', 'is_paid')
+    
+    # Add filtering options
+    list_filter = ('is_paid', 'created_at')
+    
+    # Enable searching by tracking number of the associated application
+    search_fields = ('application__tracking_number',)
+
+    # Optional: You can define how the fields are ordered in the list view
+    ordering = ('-created_at',)
+
 # Register all models with the admin site
+admin.site.register(Invoice, InvoiceAdmin)
 admin.site.register(Application, ApplicationAdmin)
 admin.site.register(PersonalDetails, PersonalDetailsAdmin)
 admin.site.register(JobDetails, JobDetailsAdmin)
