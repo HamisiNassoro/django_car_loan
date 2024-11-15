@@ -11,14 +11,22 @@
         <input type="hidden" name="stage" value="{{ stage }}">
 
         {% if stage != "1" %}
-            <button type="submit" name="prev">Previous</button>
+            <button type="submit" name="prev" class="btn btn-secondary">Previous</button>
         {% endif %}
 
         {% if stage == "4" %}
-            <button type="submit" name="submit">Submit</button>
+            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+        {% elif stage == "5" %}
+            <a href="{% url 'applications:download_invoice' application.id %}" class="btn btn-success">Download Invoice</a>
         {% else %}
-            <button type="submit" name="next">Next</button>
+            <button type="submit" name="next" class="btn btn-primary">Next</button>
         {% endif %}
     </form>
+
+    {% if stage == "5" %}
+        <div class="alert alert-success mt-4">
+            Your application has been submitted successfully. Click the "Download Invoice" button to get your invoice.
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

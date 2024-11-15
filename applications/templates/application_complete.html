@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center">
+    <h1>Application Submitted Successfully</h1>
+    <p>Thank you for completing your application. You can download your invoice below:</p>
+    <a href="{% url 'applications:download_invoice' application_id=application.id %}">Download Invoice</a>
+    <a href="{% url 'applications:home' %}" class="btn btn-secondary">Back to Home</a>
+</div>
+{% endblock %}

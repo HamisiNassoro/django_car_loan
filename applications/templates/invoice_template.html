@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Add any necessary styles for the invoice */
+        body { font-family: Arial, sans-serif; }
+        .invoice-box { padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="invoice-box">
+        <h2>Invoice</h2>
+        <p>Application ID: {{ application.id }}</p>
+        <p>Applicant: {{ application.user.username }}</p>
+        <p>Amount Due: {{ amount_due }}</p>
+        <p>Thank you for your application!</p>
+    </div>
+</body>
+</html>
