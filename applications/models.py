@@ -18,7 +18,7 @@ class Application(models.Model):
         ('rejected', 'Rejected')
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Links application to a specific user
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applications")  # Links application to a specific user
     tracking_number = models.CharField(max_length=20, unique=True, editable=False)  # Unique ID for each application
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')  # Default status of 'pending'
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically sets timestamp when application is created
@@ -36,9 +36,7 @@ class Application(models.Model):
     def __str__(self):
         return f"{self.tracking_number} - {self.user.username}"
 
-# Stores personal details for each application
-
-# Define the application and job group constants
+# Define constants for job group scales and allocations
 JOB_GROUP_SCALE_CHOICES = [
     ('L', 'L'),
     ('M', 'M'),
@@ -60,9 +58,9 @@ MARITAL_STATUS_CHOICES = [
     ('widowed', 'Widowed'),
 ]
 
-# Main Personal Details model
+# Stores personal details for each application
 class PersonalDetails(models.Model):
-    application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name="personal_details")
+    application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name="personal_details")  # Links to Application model
     title = models.CharField(max_length=5, choices=[('Mr', 'Mr'), ('Mrs', 'Mrs'), ('Miss', 'Miss'), ('Ms', 'Ms'), ('Dr', 'Dr'), ('Prof', 'Prof')], default='Mr')
     surname = models.CharField(max_length=100, default="Doe")
     other_names = models.CharField(max_length=100, default="John")
@@ -99,9 +97,9 @@ class PersonalDetails(models.Model):
     def __str__(self):
         return f"{self.surname} {self.other_names}"
 
-# Job Details model
+# Job Details model, linked to PersonalDetails
 class JobDetails(models.Model):
-    personal_details = models.OneToOneField(PersonalDetails, on_delete=models.CASCADE, related_name="job_details")
+    personal_details = models.OneToOneField(PersonalDetails, on_delete=models.CASCADE, related_name="job_details")  # Links to PersonalDetails
     designation = models.CharField(max_length=100, default="Employee")
     date_of_first_appointment = models.DateField(default="2005-01-01")
     date_of_current_appointment = models.DateField(default="2020-01-01")
@@ -122,7 +120,7 @@ class JobDetails(models.Model):
 
 # Stores loan details for each application
 class LoanDetails(models.Model):
-    application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name="loan_details")  # One-to-one link with Application
+    application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name="loan_details")  # Links to Application model
     loan_amount = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)], default=0.00)  # Default loan amount of 0.00
     repayment_period = models.PositiveIntegerField(default=12)  # Default repayment period of 12 months
     vehicle_make = models.CharField(max_length=50, default="Unknown")  # Default make of 'Unknown'

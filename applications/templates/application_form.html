@@ -4,14 +4,21 @@
 
 {% block content %}
 <div class="container" id="application-container">
-    <div id="stage1" class="stage">
-        <h2>Step 1: Personal Information</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="hidden" name="stage" value="1">
-            <button type="submit" id="next-button">Next</button>
-        </form>
-    </div>
+    <h2>Application Stage {{ stage }}</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="stage" value="{{ stage }}">
+
+        {% if stage != "1" %}
+            <button type="submit" name="prev">Previous</button>
+        {% endif %}
+
+        {% if stage == "4" %}
+            <button type="submit" name="submit">Submit</button>
+        {% else %}
+            <button type="submit" name="next">Next</button>
+        {% endif %}
+    </form>
 </div>
 {% endblock %}
