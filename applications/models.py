@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.utils import timezone
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 # Tracks the last used application number for generating unique tracking numbers
 class ApplicationTracker(models.Model):
@@ -164,3 +166,18 @@ class DocumentUpload(models.Model):
 
     def __str__(self):
         return f"{self.document_type} for {self.application.tracking_number}"
+
+class Invoice(models.Model):
+    application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name="invoice")
+    created_at = models.DateTimeField(default=timezone.now)
+    amount_due = models.DecimalField(max_digits=12, decimal_places=2)
+    is_paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Invoice for {self.application.tracking_number}"
+
+@receiver(post_save, sender=Application)
+def create_invoice(sender, instance, created, **kwargs):
+    if created and instance.status == 'submitted':
+        # Create invoice when application is submitted
+        Invoice.objects.get_or_create(application=instance, defaults={'amount_due': 500})
