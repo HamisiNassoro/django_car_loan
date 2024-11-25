@@ -126,3 +126,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
 
+# settings.py
+
+MPESA_ENV = 'sandbox'  # Change to 'production' for live
+MPESA_CONSUMER_KEY = '4CelAspFQYfTwtGF0kkq5eMrOSRx5GpUZh7ePmeltqD3TGpH'
+MPESA_CONSUMER_SECRET = 'MqIl9N9GrrELyJMoSoxWlOlEnlpZ9IwVApgojDJDr0YgBfVoeQEs3YRK9F1gsoPP'
+
+# Callback URLs
+MPESA_CALLBACK_URL = 'https://yourdomain.com/mpesa/callback/'
+MPESA_STK_PUSH_URL = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
+MPESA_AUTH_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+
+# Business Short Code and Pass Key
+MPESA_BUSINESS_SHORTCODE = '174379'  # Replace with your short code
+MPESA_PASSKEY = 'your_passkey'

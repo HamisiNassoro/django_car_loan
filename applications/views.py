@@ -6,6 +6,10 @@ from .utils import generate_invoice_pdf
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
 import logging
+from django.http import JsonResponse
+# from .mpesa_utils import initiate_stk_push
+from .utils import initiate_mpesa_payment
+from .forms import PaymentForm
 
 logger = logging.getLogger(__name__)
 
@@ -176,3 +180,32 @@ def download_invoice(request, application_id):
     response = FileResponse(buffer, content_type="application/pdf")
     response["Content-Disposition"] = f"attachment; filename=invoice_{application.tracking_number}.pdf"
     return response
+
+
+def payment_form_view(request):
+    if request.method == "POST":
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            payment = form.save()
+            # Convert Decimal to float before passing to initiate_mpesa_payment
+            response = initiate_mpesa_payment(payment.phone_number, float(payment.amount))
+            if response.get("ResponseCode") == "0":
+                payment.transaction_id = response.get("CheckoutRequestID")
+                payment.status = "Pending"
+                payment.save()
+                return redirect("applications:payment_success")
+            else:
+                payment.status = "Failed"
+                payment.save()
+                return redirect("applications:payment_error")
+    else:
+        form = PaymentForm()
+    return render(request, "payment_form.html", {"form": form})
+
+def payment_success_view(request):
+    return render(request, "payment_success.html")
+
+def payment_error_view(request):
+    return render(request, "payment_error.html")
+
+

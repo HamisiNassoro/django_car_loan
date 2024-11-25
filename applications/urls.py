@@ -9,6 +9,9 @@ urlpatterns = [
     path('enquiry/', views.enquiry_view, name='enquiry'),           # Enquiry form
     path('faqs/', views.faqs_view, name='faqs'),                    # FAQs
     path('complete/<int:application_id>/', views.application_complete_view, name='application_complete'),# Application complete
+    path("payment/", views.payment_form_view, name="payment_form"),
+    path("payment-success/", views.payment_success_view, name="payment_success"),
+    path("payment-error/", views.payment_error_view, name="payment_error"),
     # Invoice download URL
     path('download_invoice/<int:application_id>/', views.download_invoice, name='download_invoice'),
 

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Application, PersonalDetails, LoanDetails, DocumentUpload, JobDetails
+from .models import Application, PersonalDetails, LoanDetails, DocumentUpload, JobDetails, Payment
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
@@ -56,3 +56,12 @@ class DocumentUploadForm(forms.ModelForm):
     class Meta:
         model = DocumentUpload
         fields = ['document_type', 'document']
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = ['phone_number', 'amount']
+        widgets = {
+            'phone_number': forms.TextInput(attrs={'placeholder': 'Enter phone number'}),
+            'amount': forms.NumberInput(attrs={'placeholder': 'Enter amount'}),
+        }

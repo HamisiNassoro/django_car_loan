@@ -4,6 +4,7 @@ from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.utils.timezone import now
 
 # Tracks the last used application number for generating unique tracking numbers
 class ApplicationTracker(models.Model):
@@ -181,3 +182,14 @@ def create_invoice(sender, instance, created, **kwargs):
     if created and instance.status == 'submitted':
         # Create invoice when application is submitted
         Invoice.objects.get_or_create(application=instance, defaults={'amount_due': 500})
+
+
+class Payment(models.Model):
+    phone_number = models.CharField(max_length=15)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_id = models.CharField(max_length=100, blank=True, null=True)
+    status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Success', 'Success'), ('Failed', 'Failed')], default='Pending')
+    created_at = models.DateTimeField(default= now)
+
+    def __str__(self):
+        return f"{self.phone_number} - {self.amount} - {self.status}"
