@@ -16,11 +16,11 @@ def home(request):
     return render(request, 'home.html')
 
 # Multi-step application form view
-@login_required
+# @login_required
 def application_form(request):
     # Retrieve the latest pending application for the user, or create a new one
     application, created = Application.objects.get_or_create(
-        user=request.user,
+        # user=request.user,
         status='pending',
     )
 
@@ -103,7 +103,7 @@ def application_form(request):
     return render(request, 'application_form.html', {'form': form, 'stage': stage, 'application': application})
 
 # Application completion view
-@login_required
+# @login_required
 def application_complete_view(request, application_id):
     # Retrieve the application using the provided ID
     application = get_object_or_404(Application, id=application_id, user=request.user)
