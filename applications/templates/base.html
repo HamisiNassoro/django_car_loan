@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Car Loan Application{% endblock %}</title>
+
+    <title style="">{% block title %}Car Loan Application{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="{% static 'js/application_process.js' %}" defer></script>
 </head>
-<body>
+
+<body style="font-family: Poppins;" class="{% block body_class %}default{% endblock %}">
     <header>
         <nav>
-            <div class="logo">
-                <a href="{% url 'applications:home' %}">Car Loan Scheme</a>
+            <img style="height:70px;width:250px;border-radius: 8px;margin-left: -115px;"
+                src="{% static '/img/treasury.png' %}" alt="Car Loan Scheme">
+
+            <div class="logo" style="margin-left:-450px;">
+                <!-- <a href="{% url 'applications:home' %}">Car Loan Scheme</a> -->
             </div>
             <ul class="nav-links">
                 <li><a href="{% url 'applications:home' %}">Home</a></li>
@@ -23,16 +29,24 @@
         </nav>
     </header>
 
-    <main class="content">
-        {% block content %}{% endblock %}
+    <main class="content" style="width:40% ; margin-top:50px;margin-left: 50px; ">
+        <div class="main-text" style="margin-top: 15px;margin-bottom:15px;margin-right:10px;">
+            {% block content %}{% endblock %}
+        </div>
     </main>
+
+    
+
+    <div class="image-container" style="margin-top:-450px;">
+        <img style="height:450px;width:600px;border-radius: 8px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);margin-left:50%;" src="{% static '/img/R.jpg' %}"
+            alt="Car Loan Scheme">
+    </div>
 
     <footer>
         <div class="footer-content">
             <p>&copy; 2024 Car Loan Scheme for Civil Servants. All rights reserved.</p>
-            <div class="social-media">
-                <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">LinkedIn</a>
-            </div>
+
         </div>
     </footer>
 
@@ -42,4 +56,163 @@
         <p>Hello! How can I assist you today?</p>
     </div>
 </body>
+<style>
+    /* General Reset */
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        color: #333;
+        line-height: 1.6;
+        box-sizing: border-box;
+    }
+
+    header {
+        background-color: #000000;
+        color: #fff;
+        padding: 10px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .logo a {
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #fff;
+        margin-left: -95px;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-links li a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .nav-links li a:hover {
+        color: #FFD700;
+    }
+
+    .content {
+        max-width: 1200px;
+        /* margin: 20px auto; */
+        padding-left: 50px;
+        background: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .content img {
+        /* height: auto; */
+        /* border-radius: 8px; */
+        /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    }
+
+    /* Add this CSS to hide the image on pages with class `no-image` */
+    body.no-image .image-container {
+        display: none;
+    }
+
+    footer {
+        background-color: #000000;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        font-size: 12.5px;
+    }
+
+    .footer-content p {
+        margin: 10px 0;
+    }
+
+    .social-media a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: bold;
+        margin: 0 5px;
+        transition: color 0.3s;
+    }
+
+    .social-media a:hover {
+        color: #fff;
+    }
+
+    #chatbot {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        background: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        padding: 10px;
+        display: none;
+        z-index: 1001;
+    }
+
+    #chatbot p {
+        margin: 10px 0;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .close-chat {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #333;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .nav-links {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .content {
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
+
+        footer {
+            font-size: 0.9rem;
+        }
+    }
+
+  
+
+    
+</style>
+
+
 </html>

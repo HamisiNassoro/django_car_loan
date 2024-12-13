@@ -1,10 +1,54 @@
 {% extends 'base.html' %}
 
+{% block body_class %}no-image{% endblock %}
+
 {% block content %}
-<h2>Frequently Asked Questions</h2>
-<div class="faq">
-    <h3>What is the eligibility criteria?</h3>
-    <p>Details about eligibility...</p>
+    <div class="faq-container">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq">
+            <h3>What is the eligibility criteria?</h3>
+            <p>Details about eligibility...</p>
+            <p>Here’s a numbered list of the requirements:</p>
+            <ol>
+                <li><strong>Joint Registration:</strong> The applicant (borrower) must undertake to have the car registered jointly in the name of State Officers and Civil Servants Motor Car Loan Scheme Fund under him/her.</li>
+                <li><strong>Comprehensive Insurance:</strong> The applicant must ensure that the vehicle is covered by full comprehensive insurance throughout the loan period; otherwise, the board will renew the insurance and debit the applicant's loan account.</li>
+                <li><strong>Cost of Valuation and Legal Fees:</strong> Civil servants are required to meet the cost of valuation and legal fees before receiving the loan.</li>
+                <li><strong>Driving License:</strong> Only civil servants with valid driving licenses are eligible for the loan.</li>
+                <li><strong>Monthly Installments:</strong> Civil servants must pay the amount due under the purchase agreement in monthly installments, which are deducted directly from their salaries.</li>
+                <li><strong>Certified Sale Agreement:</strong> Applicants must provide a certified copy of the sale agreement relating to the acquired car.</li>
+                <li><strong>Valuation Report:</strong> Civil servants must present a valuation report from an approved valuer.</li>
+                <li><strong>Known Vehicle Supplier:</strong> The vehicle's supplier must be known.</li>
+                <li><strong>First-Come, First-Served Basis:</strong> Applications are processed on a first-come, first-served basis after the duly completed application form is returned.</li>
+                <li><strong>Life Insurance:</strong> Life insurance is a prerequisite for applying for a car loan.</li>
+                <li><strong>Loan Continuation upon Termination:</strong> If the borrower ceases to be a civil servant, they must continue repaying the loan until completion.</li>
+            </ol>
+
+        </div>
+
+        
+    
+
     <!-- More FAQs here -->
+    <style>
+        .hide-image .image-wrapper {
+            display: none;
+        }
+     
+    .full-width .content {
+        max-width: 100%;  /* Makes the content stretch across the full width */
+        width: 150%;
+        padding-left: 0;
+        padding-right: 0; /* Remove left and right padding */
+    }
+    
+    
+</style>
+
+    
 </div>
+
+
 {% endblock %}
+
+
+

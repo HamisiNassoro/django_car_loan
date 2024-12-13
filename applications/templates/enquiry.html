@@ -3,9 +3,9 @@
 {% block title %}Enquiry{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container" style="width:550px;margin-left:-30px;">
     <h2>Contact Us</h2>
-    <form method="POST">
+    <form method="POST" style="margin-top:5px;">
         {% csrf_token %}
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
@@ -13,10 +13,10 @@
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
         
-        <label for="message">Message:</label>
-        <textarea id="message" name="message" required></textarea>
+        <label for="message" >Message:</label>
+        <textarea style="width:485px;" id="message" name="message" required></textarea>
         
-        <button type="submit">Submit</button>
+        <button type="submit"style="width:485px;margin-top:15px;">Submit</button>
     </form>
 </div>
 {% endblock %}

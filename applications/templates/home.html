@@ -4,24 +4,56 @@
 
 {% block content %}
 <div class="container">
-    <h1>Motor Car Loan Scheme for Civil Servants</h1>
-    <p>Welcome to the official motor car loan application portal for civil servants. Here you can learn about eligibility, loan benefits, and interest rates before applying.</p>
+    <h1 style="font-size:25px;">Motor Car Loan Scheme for Civil Servants</h1>
+    <p>Welcome to the official motor car loan application portal for civil servants. Here you can learn about
+        eligibility, loan benefits, and interest rates before applying.</p>
 
     <section>
-        <h2>Eligibility Criteria</h2>
+        <h2 style="font-size:21.5px;">Eligibility Criteria</h2>
         <p>Details on who is eligible for the car loan.</p>
     </section>
 
     <section>
-        <h2>Loan Benefits</h2>
+        <h2 style="font-size:21.5px;">Loan Benefits</h2>
         <p>Information on benefits, such as lower interest rates and flexible repayment options.</p>
     </section>
 
     <section>
-        <h2>Interest Rates</h2>
+        <h2 style="font-size:21.5px;">Interest Rates</h2>
         <p>Overview of interest rates and repayment terms.</p>
     </section>
 
     <a href="{% url 'applications:application_form' %}" class="button">Start Application</a>
+    
+    <style>
+        .button {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #4CAF50;
+            /* Primary blue color */
+            text-decoration: none;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            /* Darker blue */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            background-color: #003d80;
+            /* Even darker blue */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(0);
+        }
+    </style>
 </div>
 {% endblock %}

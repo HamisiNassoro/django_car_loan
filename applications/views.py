@@ -16,11 +16,11 @@ def home(request):
     return render(request, 'home.html')
 
 # Multi-step application form view
-# @login_required
+@login_required
 def application_form(request):
     # Retrieve the latest pending application for the user, or create a new one
     application, created = Application.objects.get_or_create(
-        # user=request.user,
+        user=request.user,
         status='pending',
     )
 
