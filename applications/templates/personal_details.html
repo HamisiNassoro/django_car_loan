@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block body_class %}no-image{% endblock %}
+
 {% block content %}
 <div class="form-container">
     <h2>Step 1: Personal Information</h2>
@@ -14,6 +16,8 @@
         {{ form.as_p }}
         <button type="submit" class="btn">Next</button>
     </form>
+    <style>
+        
+    </style>
 </div>
-
 {% endblock %}

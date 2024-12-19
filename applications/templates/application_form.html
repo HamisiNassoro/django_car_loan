@@ -1,32 +1,314 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
 
-{% block title %}Application Form{% endblock %}
+<head>
+    <title>Application Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Main container styling */
+        .container {
+            padding: 40px 30px;
+            max-width: 1280px;
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
 
-{% block content %}
-<div class="container" id="application-container">
-    <h2>Application Stage {{ stage }}</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" name="stage" value="{{ stage }}">
+        /* Header styling */
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 35px;
+            font-weight: 600;
+        }
 
-        {% if stage != "1" %}
-            <button type="submit" name="prev" class="btn btn-secondary">Previous</button>
-        {% endif %}
+        /* Navigation tabs styling */
+        .nav-tabs {
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 30px;
+        }
 
-        {% if stage == "4" %}
-            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-        {% elif stage == "5" %}
-            <a href="{% url 'applications:download_invoice' application.id %}" class="btn btn-success">Download Invoice</a>
-        {% else %}
-            <button type="submit" name="next" class="btn btn-primary">Next</button>
-        {% endif %}
-    </form>
+        .nav-tabs .nav-item {
+            margin-bottom: -1px;
+            flex: 1;
+            text-align: center;
+        }
 
-    {% if stage == "5" %}
-        <div class="alert alert-success mt-4">
-            Your application has been submitted successfully. Click the "Download Invoice" button to get your invoice.
-        </div>
-    {% endif %}
-</div>
-{% endblock %}
+        .nav-tabs .nav-link {
+            color: #95a5a6;
+            font-weight: 500;
+            padding: 15px 0;
+            border: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        /* Custom classes for different statuses */
+        .nav-tabs .nav-link.active {
+            color: #3498db !important;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-tabs .nav-link.completed {
+            color: #28a745 !important;
+            border-bottom: 3px solid #28a745;
+        }
+
+        .nav-tabs .nav-link.incomplete {
+            color: #7f8c8d !important;
+            border-bottom: 3px solid #7f8c8d;
+        }
+
+        .nav-tabs .nav-link i {
+            margin-right: 8px;
+        }
+
+     /* Stage number styling */
+.nav-tabs .nav-link .stage-number {
+    font-size: 18px;
+    font-weight: 700;
+    margin-right: 8px;
+    display: inline-block;
+    padding: 0; /* Removed padding to avoid circle */
+}
+
+/* Grey stage number for unstarted stages */
+.nav-tabs .nav-link.incomplete .stage-number {
+    color: #7f8c8d; /* Grey color for unstarted numbers */
+}
+
+/* Completed step styling */
+.nav-tabs .nav-link.completed .stage-number {
+    color: #28a745; /* Green color for completed numbers */
+}
+
+/* Active step styling */
+.nav-tabs .nav-link.active .stage-number {
+    color: #3498db; /* Blue color for active step numbers */
+}
+
+        /* Form styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Input field styling */
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="file"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #dde1e5;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            transition: border-color 0.15s ease-in-out;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        input[type="tel"]:focus,
+        input[type="file"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #3498db;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        /* Label styling */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        /* Error message styling */
+        .errorlist {
+            color: #dc3545;
+            font-size: 12px;
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0;
+        }
+
+        /* Button styling */
+        .btn {
+            min-width: 120px;
+            padding: 10px 20px;
+            font-weight: 500;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            border-color: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+            border-color: #7f8c8d;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        /* Spacing utilities */
+        .mt-4 {
+            margin-top: 1.5rem !important;
+        }
+
+        /* File input specific styling */
+        input[type="file"] {
+            padding: 6px;
+        }
+
+        /* Select dropdown specific styling */
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 1em;
+            padding-right: 30px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .nav-tabs .nav-link {
+                padding: 10px 5px;
+                font-size: 14px;
+            }
+        }
+
+        /* Page background */
+        body {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5 p-4" style="font-family: Poppins;">
+        <h2 class="mb-4 text-center" style="font-size:22px;">Application Form</h2>
+
+        <!-- Progress Steps -->
+        <ul class="nav nav-tabs" id="progress-steps">
+            <li class="nav-item">
+                <a class="nav-link {% if stage == '1' %}active{% elif stage > '1' %}completed{% else %}incomplete{% endif %}" id="step-1" href="#">
+                    <span class="stage-number">1</span> Personal Details
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if stage == '2' %}active{% elif stage > '2' %}completed{% else %}incomplete{% endif %}" id="step-2" href="#">
+                    <span class="stage-number">2</span> Job Details
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if stage == '3' %}active{% elif stage > '3' %}completed{% else %}incomplete{% endif %}" id="step-3" href="#">
+                    <span class="stage-number">3</span> Loan Details
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if stage == '4' %}active{% elif stage > '4' %}completed{% else %}incomplete{% endif %}" id="step-4" href="#">
+                    <span class="stage-number">4</span> Documents
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if stage == '5' %}active{% elif stage > '5' %}completed{% else %}incomplete{% endif %}" id="step-5" href="#">
+                    <span class="stage-number">5</span> Complete
+                </a>
+            </li>
+        </ul>
+
+        <!-- Form -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mt-4">
+                <div class="row">
+                    {% for field in form %}
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                            <div class="errorlist">
+                                {{ field.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                {% if stage != '1' %}
+                <button type="submit" name="prev" class="btn btn-secondary">Previous</button>
+                {% endif %}
+
+                {% if stage != '5' %}
+                <button type="submit" name="next" class="btn btn-primary">Next</button>
+                {% else %}
+                <button type="submit" name="submit" class="btn btn-success">Submit</button>
+                {% endif %}
+            </div>
+            <input type="hidden" name="stage" id="current-stage" value="{{ stage }}">
+        </form>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const currentStage = parseInt(document.getElementById("current-stage").value);
+                for (let i = 1; i < currentStage; i++) {
+                    document.getElementById(`step-${i}`).classList.add("completed");
+                }
+                document.getElementById(`step-${currentStage}`).classList.add("active");
+            });
+        </script>
+
+    </div>
+</body>
+
+</html>
+
+
+
