@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import PersonalDetailsForm, LoanDetailsForm, DocumentUploadForm, JobDetailsForm
+from .forms import PersonalDetailsForm, LoanDetailsForm, JobDetailsForm, MultiDocumentUploadForm
 from .models import Application, ApplicationTracker,PersonalDetails, JobDetails, LoanDetails, DocumentUpload, Invoice
 from django.contrib.auth.decorators import login_required
 from .utils import generate_invoice_pdf
@@ -27,6 +27,9 @@ def application_form(request):
     # Determine the current stage from POST data, defaulting to stage 1
     stage = request.POST.get('stage', '1')
 
+    # Initialize form variable
+    form = None
+
     if request.method == 'POST':
         # Handle stage progression
         if request.POST.get('next'):
@@ -41,6 +44,7 @@ def application_form(request):
             # Create an invoice if not already created
             # Create the invoice if it doesn't exist
             invoice, created = Invoice.objects.get_or_create(application=application, defaults={'amount_due': 500})
+            # Invoice.objects.get_or_create(application=application, defaults={'amount_due': 500})
 
             # Redirect to application complete page with the application ID
             return redirect('applications:application_complete', application_id=application.id)
@@ -56,8 +60,8 @@ def application_form(request):
                 stage = '2'  # Move to next stage after saving
 
         elif stage == '2':
-            if not hasattr(application, 'personal_details'):
-                return redirect('applications:application_form')
+            # if not hasattr(application, 'personal_details'):
+            #     return redirect('applications:application_form')
             job_details_instance = JobDetails.objects.filter(personal_details=application.personal_details).first()
             form = JobDetailsForm(request.POST, instance=job_details_instance)
             if form.is_valid():
@@ -76,25 +80,38 @@ def application_form(request):
                 stage = '4'  # Move to next stage after saving
 
         elif stage == '4':
-            form = DocumentUploadForm(request.POST, request.FILES)
+            # Handle multiple document uploads
+            # form = DocumentUploadForm(request.POST, request.FILES)
+            # if form.is_valid():
+            #     document_upload = form.save(commit=False)
+            #     document_upload.application = application
+            #     document_upload.save()
+            #     stage = '5'  # Move to final stage after saving
+            physical_disability = application.personal_details.physical_disability if hasattr(application, 'personal_details') else False
+            form = MultiDocumentUploadForm(request.POST, request.FILES, physical_disability=physical_disability)
             if form.is_valid():
-                document_upload = form.save(commit=False)
-                document_upload.application = application
-                document_upload.save()
-                stage = '5'  # Move to final stage after saving
+                for doc_type, uploaded_file in form.cleaned_data.items():
+                    DocumentUpload.objects.create(
+                        application=application,
+                        document_type=doc_type,
+                        document=uploaded_file
+                    )
+                stage = '5'
 
     else:
         # Load the correct form for the current stage
         if stage == '1':
             form = PersonalDetailsForm(instance=PersonalDetails.objects.filter(application=application).first())
         elif stage == '2':
-            if not hasattr(application, 'personal_details'):
-                return redirect('applications:application_form')
+            # if not hasattr(application, 'personal_details'):
+            #     return redirect('applications:application_form')
             form = JobDetailsForm(instance=JobDetails.objects.filter(personal_details=application.personal_details).first())
         elif stage == '3':
             form = LoanDetailsForm(instance=LoanDetails.objects.filter(application=application).first())
         elif stage == '4':
-            form = DocumentUploadForm()
+            # form = DocumentUploadForm()
+            physical_disability = application.personal_details.physical_disability if hasattr(application, 'personal_details') else False
+            form = MultiDocumentUploadForm(physical_disability=physical_disability)
         elif stage == '5':
             # No form needed for stage 5
             form = None
