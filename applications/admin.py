@@ -17,13 +17,13 @@ class PersonalDetailsAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Personal Information", {
             'fields': (
-                'title', 'surname', 'other_names', 'gender', 'date_of_birth', 
+                'title', 'surname', 'other_names', 'gender', 'date_of_birth',
                 'national_id', 'email_address', 'residential_address', 'personal_no'
             )
         }),
         ("Marital & Kin Details", {
             'fields': (
-                'marital_status', 'spouse_name', 'spouse_id', 'next_of_kin', 
+                'marital_status', 'spouse_name', 'spouse_id', 'next_of_kin',
                 'next_of_kin_relationship', 'next_of_kin_id', 'next_of_kin_mobile'
             )
         }),
@@ -39,7 +39,7 @@ class PersonalDetailsAdmin(admin.ModelAdmin):
 # Admin configuration for JobDetails model
 class JobDetailsAdmin(admin.ModelAdmin):
     list_display = (
-        'personal_details', 'designation', 'job_group_scale', 
+        'personal_details', 'designation', 'job_group_scale',
         'current_net_salary', 'allocated_amount', 'ministry_department'
     )
     search_fields = ('personal_details__surname', 'designation', 'ministry_department')
@@ -78,10 +78,10 @@ class DocumentUploadAdmin(admin.ModelAdmin):
 class InvoiceAdmin(admin.ModelAdmin):
     # Display these fields in the list view
     list_display = ('application', 'amount_due', 'created_at', 'is_paid')
-    
+
     # Add filtering options
     list_filter = ('is_paid', 'created_at')
-    
+
     # Enable searching by tracking number of the associated application
     search_fields = ('application__tracking_number',)
 

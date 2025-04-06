@@ -72,17 +72,17 @@ class PersonalDetails(models.Model):
     email_address = models.EmailField(max_length=100, default="john.doe@example.com")
     residential_address = models.CharField(max_length=200, default="123 Default Street")
     personal_no = models.CharField(max_length=20, unique=True, default="P0000000")
-    
+
     # Marital and spouse details
     marital_status = models.CharField(max_length=10, choices=MARITAL_STATUS_CHOICES, default='single')
     spouse_name = models.CharField(max_length=100, blank=True, null=True)  # Only filled if married
     spouse_id = models.CharField(max_length=20, blank=True, null=True, default="")
-    
+
     next_of_kin = models.CharField(max_length=100, default="Jane Doe")
     next_of_kin_relationship = models.CharField(max_length=50, default="Sibling")
     next_of_kin_id = models.CharField(max_length=20, default="NOK0001")
     next_of_kin_mobile = models.CharField(max_length=15, default="0712345678")
-    
+
     physical_disability = models.BooleanField(default=False)
     disability_details = models.CharField(max_length=255, blank=True, null=True)  # Specify disability if any
 
